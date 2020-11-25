@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+ server:
+  build: ./server
+  container_name: "server"
+  ports:
+   - 8080:8080
+  links:
+   - mongo
+  depends_on:
+   - mongo
+  volumes:
+   - ./server:/server
+   - /home/app/nodeapp/node_modules
+
+ nginx:
+  image: nginx:latest
+  container_name: "nginx"
+  ports:
+   - "80:80"
+  depends_on:
+   - server
+  volumes:
+   - ./server:/server
+   - ./nginx/site.conf:/etc/nginx/conf.d/default.conf:cached
+
+ mongo:
+  image: mongo
+  container_name: "mongo"
+  command:
+   - mongod
+  ports:
+   - 27017:27017
+  volumes:
+   - mongo-data:/data/db
+
+ mongo-data:
+  image: busybox
+  tty: true
+
+volumes:
+ mongo-data:
