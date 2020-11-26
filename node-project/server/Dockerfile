@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 # アプリケーションの依存関係をインストールする
 COPY package*.json ./
 RUN npm install
+RUN npm install -g express
 
 # アプリケーションのソースをバンドルする
 COPY . .
